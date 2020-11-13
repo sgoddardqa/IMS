@@ -8,3 +8,10 @@ CREATE TABLE IF NOT EXISTS customers (
     surname VARCHAR(40) NULL DEFAULT NULL,
     PRIMARY KEY (customer_id)
 );
+
+CREATE TABLE IF NOT EXISTS items (
+    item_id INT(11) NOT NULL AUTO_INCREMENT,
+    item_name VARCHAR(40) NULL DEFAULT NULL,
+    cost DECIMAL(10,2) NOT NULL DEFAULT 0,
+    PRIMARY KEY (item_id)
+);
