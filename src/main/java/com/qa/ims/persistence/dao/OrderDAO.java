@@ -70,6 +70,10 @@ public class OrderDAO implements Dao<Order> {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("INSERT INTO orders(customer_id) values('" + order.getCustomer() + "')");
+			for (Long item : order.getItems()) {
+				statement.executeUpdate("INSERT INTO orders_items(order_id, item_id) values('" + order.getId()
+						+ "', '" + item + "')");
+			}
 			return readLatest();
 		} catch (Exception e) {
 			LOGGER.debug(e);
@@ -102,7 +106,12 @@ public class OrderDAO implements Dao<Order> {
 	public Order update(Order order) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("DELETE FROM orders_items WHERE order_id = " + order.getId());
 			statement.executeUpdate("UPDATE orders SET customer_id = '" + order.getCustomer() + "' WHERE order_id =" + order.getId());
+			for (Long item : order.getItems()) {
+				statement.executeUpdate("INSERT INTO orders_items(order_id, item_id) values('" + order.getId()
+						+ "', '" + item + "')");
+			}
 			return readItem(order.getId());
 		} catch (Exception e) {
 			LOGGER.debug(e);
@@ -120,6 +129,7 @@ public class OrderDAO implements Dao<Order> {
 	public int delete(long id) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("DELETE FROM orders_items WHERE order_id = " + id);
 			return statement.executeUpdate("DELETE FROM orders WHERE order_id = " + id);
 		} catch (Exception e) {
 			LOGGER.debug(e);
