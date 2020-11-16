@@ -46,7 +46,8 @@ public class OrderController implements CrudController<Order> {
 	public Order create() {
 		LOGGER.info("Please enter a customer ID.");
 		Long customer = utils.getLong();
-		List<Long> items = new ArrayList<>();
+		LOGGER.info("Please enter a list of item IDs.");
+		List<Long> items = utils.getLongList();
 		Order order = orderDAO.create(new Order(customer, items));
 		LOGGER.info("Order created");
 		return order;
@@ -61,7 +62,8 @@ public class OrderController implements CrudController<Order> {
 		Long id = utils.getLong();
 		LOGGER.info("Please enter a customer ID.");
 		Long customer = utils.getLong();
-		List<Long> items = new ArrayList<>();
+		LOGGER.info("Please enter a list of item IDs.");
+		List<Long> items = utils.getLongList();
 		Order order = orderDAO.update(new Order(id, customer, items));
 		LOGGER.info("Order Updated");
 		return order;
