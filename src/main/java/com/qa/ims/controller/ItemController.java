@@ -10,7 +10,7 @@ import com.qa.ims.persistence.domain.Item;
 import com.qa.ims.utils.Utils;
 
 /**
- * Takes in customer details for CRUD functionality
+ * Takes in order details for CRUD functionality
  *
  */
 public class ItemController implements CrudController<Item> {
