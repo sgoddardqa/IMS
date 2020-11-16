@@ -21,7 +21,7 @@ public class OrderDAO implements Dao<Order> {
 	public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 		Long id = resultSet.getLong("order_id");
 		Long customer = resultSet.getLong("customer_id");
-		List<Long> items = new ArrayList<>();
+		List<Long> items = readOrderItems(resultSet.getLong("orders_items_id"));
 		return new Order(id, customer, items);
 	}
 
@@ -126,6 +126,23 @@ public class OrderDAO implements Dao<Order> {
 			LOGGER.error(e.getMessage());
 		}
 		return 0;
+	}
+	
+	// Get a list of item ids given an order id
+	private List<Long> readOrderItems(Long orderId) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders_items WHERE order_id = " + orderId);) {
+			List<Long> items = new ArrayList<>();
+			while (resultSet.next()) {
+				items.add(resultSet.getLong("item_id"));
+			}
+			return items;
+		} catch (SQLException e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return new ArrayList<>();
 	}
 
 }
