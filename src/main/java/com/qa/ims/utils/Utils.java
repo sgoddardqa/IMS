@@ -22,13 +22,12 @@ public class Utils {
 	public Long getLong() {
 		String input = getString();
 		Long longInput = null;
-		do {
-			try {
-				longInput = Long.parseLong(input);
-			} catch (NumberFormatException nfe) {
-				LOGGER.info("Error - Please enter a number");
-			}
-		} while (longInput == null);
+		try {
+			longInput = Long.parseLong(input);
+		} catch (NumberFormatException nfe) {
+			LOGGER.info("Error - Please enter an integer number");
+			longInput = getLong();
+		}
 		return longInput;
 	}
 
@@ -39,13 +38,12 @@ public class Utils {
 	public Double getDouble() {
 		String input = getString();
 		Double doubleInput = null;
-		do {
-			try {
-				doubleInput = Double.parseDouble(input);
-			} catch (NumberFormatException nfe) {
-				LOGGER.info("Error - Please enter a number");
-			}
-		} while (doubleInput == null);
+		try {
+			doubleInput = Double.parseDouble(input);
+		} catch (NumberFormatException nfe) {
+			LOGGER.info("Error - Please enter a number");
+			doubleInput = getDouble();
+		}
 		return doubleInput;
 	}
 
