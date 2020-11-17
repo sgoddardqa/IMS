@@ -1,4 +1,4 @@
-package com.qa.ims.controllers;
+package com.qa.ims.controller;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.qa.ims.controller.CustomerController;
 import com.qa.ims.persistence.dao.CustomerDAO;
 import com.qa.ims.persistence.domain.Customer;
 import com.qa.ims.utils.Utils;
