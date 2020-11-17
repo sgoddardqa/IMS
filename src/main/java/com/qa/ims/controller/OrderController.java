@@ -1,6 +1,5 @@
 package com.qa.ims.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +33,7 @@ public class OrderController implements CrudController<Order> {
 	public List<Order> readAll() {
 		List<Order> orders = orderDAO.readAll();
 		for (Order order : orders) {
-			LOGGER.info(order.toString());
+			LOGGER.info(order.toString() + ", cost: " + orderDAO.readOrderCost(order));
 		}
 		return orders;
 	}
@@ -66,7 +65,7 @@ public class OrderController implements CrudController<Order> {
 		List<Long> deleteItems = utils.getLongList();
 		LOGGER.info("Please enter a list of item IDs to add to the order.");
 		List<Long> addItems = utils.getLongList();
-		List<Long> items = orderDAO.readItem(id).getItems();
+		List<Long> items = orderDAO.readOrder(id).getItems();
 		for (Long itemId : deleteItems) {
 			items.remove(itemId);
 		}

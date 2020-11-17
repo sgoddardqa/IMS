@@ -82,7 +82,7 @@ public class OrderDAO implements Dao<Order> {
 		return null;
 	}
 
-	public Order readItem(Long id) {
+	public Order readOrder(Long id) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders WHERE order_id = " + id);) {
@@ -112,7 +112,7 @@ public class OrderDAO implements Dao<Order> {
 				statement.executeUpdate("INSERT INTO orders_items(order_id, item_id) values('" + order.getId()
 						+ "', '" + item + "')");
 			}
-			return readItem(order.getId());
+			return readOrder(order.getId());
 		} catch (Exception e) {
 			LOGGER.debug(e);
 			LOGGER.error(e.getMessage());
@@ -153,6 +153,21 @@ public class OrderDAO implements Dao<Order> {
 			LOGGER.error(e.getMessage());
 		}
 		return new ArrayList<>();
+	}
+	
+	public Double readOrderCost(Order order) {
+		Double cost = 0.0;
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT SUM(items.cost) AS total_cost FROM orders_items JOIN items "
+						+ "ON orders_items.item_id = items.item_id WHERE orders_items.order_id = " + order.getId());) {
+			resultSet.next();
+			cost = resultSet.getDouble("total_cost");
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return cost;
 	}
 
 }

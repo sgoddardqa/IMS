@@ -54,9 +54,11 @@ public class Utils {
 		List<Long> longListInput = null;
 		try {
 			longListInput = new ArrayList<>();
-			String[] inputSplit = input.split(" ");
-			for (String longString : inputSplit) {
-				longListInput.add(Long.parseLong(longString));
+			if (input.length() > 0) {
+				String[] inputSplit = input.split(" ");
+				for (String longString : inputSplit) {
+					longListInput.add(Long.parseLong(longString));
+				}
 			}
 		} catch (NumberFormatException nfe) {
 			LOGGER.info("Error - Please enter a list of integer numbers, separated by spaces");
