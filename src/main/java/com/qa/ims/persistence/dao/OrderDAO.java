@@ -21,7 +21,7 @@ public class OrderDAO implements Dao<Order> {
 	public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 		Long id = resultSet.getLong("order_id");
 		Long customer = resultSet.getLong("customer_id");
-		List<Long> items = readOrderItems(resultSet.getLong("orders_items_id"));
+		List<Long> items = readOrderItems(resultSet.getLong("order_id"));
 		return new Order(id, customer, items);
 	}
 
@@ -71,7 +71,7 @@ public class OrderDAO implements Dao<Order> {
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("INSERT INTO orders(customer_id) values('" + order.getCustomer() + "')");
 			for (Long item : order.getItems()) {
-				statement.executeUpdate("INSERT INTO orders_items(order_id, item_id) values('" + order.getId()
+				statement.executeUpdate("INSERT INTO orders_items(order_id, item_id) values('" + readLatest().getId()
 						+ "', '" + item + "')");
 			}
 			return readLatest();
