@@ -43,7 +43,7 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "id: " + id + ", first name: " + name + ", cost: " + cost;
+		return "id: " + id + ", name: " + name + ", cost: " + cost;
 	}
 
 	@Override

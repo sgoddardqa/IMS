@@ -62,8 +62,17 @@ public class OrderController implements CrudController<Order> {
 		Long id = utils.getLong();
 		LOGGER.info("Please enter a customer ID.");
 		Long customer = utils.getLong();
-		LOGGER.info("Please enter a list of item IDs.");
-		List<Long> items = utils.getLongList();
+		LOGGER.info("Please enter a list of item IDs to delete from the order.");
+		List<Long> deleteItems = utils.getLongList();
+		LOGGER.info("Please enter a list of item IDs to add to the order.");
+		List<Long> addItems = utils.getLongList();
+		List<Long> items = orderDAO.readItem(id).getItems();
+		for (Long itemId : deleteItems) {
+			items.remove(itemId);
+		}
+		for (Long itemId : addItems) {
+			items.add(itemId);
+		}
 		Order order = orderDAO.update(new Order(id, customer, items));
 		LOGGER.info("Order Updated");
 		return order;
