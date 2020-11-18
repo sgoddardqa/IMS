@@ -14,57 +14,50 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Item;
 import com.qa.ims.utils.DBUtils;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomerDAOExceptionsTest {	
+public class ItemDAOExceptionsTest {	
 	
 	@Mock
 	private DBUtils dbutils;
 	
 	@InjectMocks
-	private CustomerDAO customerDao = new CustomerDAO(dbutils);
+	private ItemDAO itemDao = new ItemDAO(dbutils);
 	
 	@Test
 	public void readAllExceptionTest() throws SQLException {
-		List<Customer> expected = new ArrayList<>();
+		List<Item> expected = new ArrayList<>();
 		when(dbutils.getConnection()).thenThrow(new SQLException("Oh no an SQL exception"));
-		assertTrue(customerDao.readAll().equals(expected));
+		assertTrue(itemDao.readAll().equals(expected));
 	}
 	
 	@Test
 	public void readLatestExceptionTest() {
-		assertNull(customerDao.readLatest());
+		assertNull(itemDao.readLatest());
 	}
 	
 	@Test
 	public void createExceptionTest() {
-		Customer customer = new Customer("Stephen", "Fry");
-		assertNull(customerDao.create(customer));
+		Item item = new Item("dark matter", -10.0);
+		assertNull(itemDao.create(item));
 	}
 	
 	@Test
 	public void readCustomerExceptionTest() {
-		assertNull(customerDao.readCustomer(1L));
+		assertNull(itemDao.readItem(1L));
 	}
 	
 	@Test
 	public void updateExceptionTest() {
-		Customer customer = new Customer("Rowan", "Atkinson");
-		assertNull(customerDao.update(customer));
+		Item item = new Item("invisible shoes", 100.0);
+		assertNull(itemDao.update(item));
 	}
 	
 	@Test
 	public void deleteExceptionTest() {
-		assertTrue(customerDao.delete(1L) == 0);
-	}
-	
-	@Test
-	public void readCustomerOrdersExceptionTest() throws SQLException {
-		List<Customer> expected = new ArrayList<>();
-		when(dbutils.getConnection()).thenThrow(new SQLException("Oh no an SQL exception"));
-		assertTrue(customerDao.readCustomerOrders(1L).equals(expected));
+		assertTrue(itemDao.delete(1L) == 0);
 	}
 	
 }

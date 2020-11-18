@@ -149,7 +149,7 @@ public class OrderDAO implements Dao<Order> {
 	}
 	
 	// Get a list of item ids given an order id
-	private List<Long> readOrderItems(Long orderId) {
+	public List<Long> readOrderItems(Long orderId) {
 		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders_items WHERE order_id = " + orderId);) {
@@ -165,12 +165,13 @@ public class OrderDAO implements Dao<Order> {
 		return new ArrayList<>();
 	}
 	
-	public Double readOrderCost(Order order) {
+	// Get the cost of an order from the order ID
+	public Double readOrderCost(Long orderId) {
 		Double cost = 0.0;
 		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT SUM(items.cost) AS total_cost FROM orders_items JOIN items "
-						+ "ON orders_items.item_id = items.item_id WHERE orders_items.order_id = " + order.getId());) {
+						+ "ON orders_items.item_id = items.item_id WHERE orders_items.order_id = " + orderId);) {
 			resultSet.next();
 			cost = resultSet.getDouble("total_cost");
 		} catch (Exception e) {

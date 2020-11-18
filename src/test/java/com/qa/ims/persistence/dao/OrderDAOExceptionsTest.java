@@ -14,57 +14,63 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.DBUtils;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomerDAOExceptionsTest {	
+public class OrderDAOExceptionsTest {	
 	
 	@Mock
 	private DBUtils dbutils;
 	
 	@InjectMocks
-	private CustomerDAO customerDao = new CustomerDAO(dbutils);
+	private OrderDAO orderDao = new OrderDAO(dbutils);
 	
 	@Test
 	public void readAllExceptionTest() throws SQLException {
-		List<Customer> expected = new ArrayList<>();
+		List<Order> expected = new ArrayList<>();
 		when(dbutils.getConnection()).thenThrow(new SQLException("Oh no an SQL exception"));
-		assertTrue(customerDao.readAll().equals(expected));
+		assertTrue(orderDao.readAll().equals(expected));
 	}
 	
 	@Test
 	public void readLatestExceptionTest() {
-		assertNull(customerDao.readLatest());
+		assertNull(orderDao.readLatest());
 	}
 	
 	@Test
 	public void createExceptionTest() {
-		Customer customer = new Customer("Stephen", "Fry");
-		assertNull(customerDao.create(customer));
+		Order order = new Order(1L, 1L, new ArrayList<>());
+		assertNull(orderDao.create(order));
 	}
 	
 	@Test
 	public void readCustomerExceptionTest() {
-		assertNull(customerDao.readCustomer(1L));
+		assertNull(orderDao.readOrder(1L));
 	}
 	
 	@Test
 	public void updateExceptionTest() {
-		Customer customer = new Customer("Rowan", "Atkinson");
-		assertNull(customerDao.update(customer));
+		Order order = new Order(1L, 1L, new ArrayList<>());
+		assertNull(orderDao.update(order));
 	}
 	
 	@Test
 	public void deleteExceptionTest() {
-		assertTrue(customerDao.delete(1L) == 0);
+		assertTrue(orderDao.delete(1L) == 0);
 	}
 	
 	@Test
-	public void readCustomerOrdersExceptionTest() throws SQLException {
-		List<Customer> expected = new ArrayList<>();
+	public void readOrderItemsExceptionTest() throws SQLException {
+		List<Order> expected = new ArrayList<>();
 		when(dbutils.getConnection()).thenThrow(new SQLException("Oh no an SQL exception"));
-		assertTrue(customerDao.readCustomerOrders(1L).equals(expected));
+		assertTrue(orderDao.readOrderItems(1L).equals(expected));
+	}
+	
+	@Test
+	public void readOrderCostExceptionTest() throws SQLException {
+		when(dbutils.getConnection()).thenThrow(new SQLException("Oh no an SQL exception"));
+		assertTrue(orderDao.readOrderCost(1L) == 0.0);
 	}
 	
 }
