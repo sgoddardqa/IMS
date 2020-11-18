@@ -16,6 +16,16 @@ import com.qa.ims.utils.DBUtils;
 public class OrderDAO implements Dao<Order> {
 
 	public static final Logger LOGGER = LogManager.getLogger();
+	
+	private DBUtils dbutils;
+	
+	public OrderDAO() {
+		this.dbutils = DBUtils.getInstance();
+	}
+	
+	public OrderDAO(DBUtils dbutils) {
+		this.dbutils = dbutils;
+	}
 
 	@Override
 	public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
@@ -32,7 +42,7 @@ public class OrderDAO implements Dao<Order> {
 	 */
 	@Override
 	public List<Order> readAll() {
-		try (Connection connection = DBUtils.getInstance().getConnection();
+		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders");) {
 			List<Order> orders = new ArrayList<>();
@@ -48,7 +58,7 @@ public class OrderDAO implements Dao<Order> {
 	}
 
 	public Order readLatest() {
-		try (Connection connection = DBUtils.getInstance().getConnection();
+		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders ORDER BY order_id DESC LIMIT 1");) {
 			resultSet.next();
@@ -67,7 +77,7 @@ public class OrderDAO implements Dao<Order> {
 	 */
 	@Override
 	public Order create(Order order) {
-		try (Connection connection = DBUtils.getInstance().getConnection();
+		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("INSERT INTO orders(customer_id) values('" + order.getCustomer() + "')");
 			for (Long item : order.getItems()) {
@@ -83,7 +93,7 @@ public class OrderDAO implements Dao<Order> {
 	}
 
 	public Order readOrder(Long id) {
-		try (Connection connection = DBUtils.getInstance().getConnection();
+		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders WHERE order_id = " + id);) {
 			resultSet.next();
@@ -104,7 +114,7 @@ public class OrderDAO implements Dao<Order> {
 	 */
 	@Override
 	public Order update(Order order) {
-		try (Connection connection = DBUtils.getInstance().getConnection();
+		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("DELETE FROM orders_items WHERE order_id = " + order.getId());
 			statement.executeUpdate("UPDATE orders SET customer_id = '" + order.getCustomer() + "' WHERE order_id =" + order.getId());
@@ -127,7 +137,7 @@ public class OrderDAO implements Dao<Order> {
 	 */
 	@Override
 	public int delete(long id) {
-		try (Connection connection = DBUtils.getInstance().getConnection();
+		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("DELETE FROM orders_items WHERE order_id = " + id);
 			return statement.executeUpdate("DELETE FROM orders WHERE order_id = " + id);
@@ -140,7 +150,7 @@ public class OrderDAO implements Dao<Order> {
 	
 	// Get a list of item ids given an order id
 	private List<Long> readOrderItems(Long orderId) {
-		try (Connection connection = DBUtils.getInstance().getConnection();
+		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders_items WHERE order_id = " + orderId);) {
 			List<Long> items = new ArrayList<>();
@@ -157,7 +167,7 @@ public class OrderDAO implements Dao<Order> {
 	
 	public Double readOrderCost(Order order) {
 		Double cost = 0.0;
-		try (Connection connection = DBUtils.getInstance().getConnection();
+		try (Connection connection = dbutils.getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT SUM(items.cost) AS total_cost FROM orders_items JOIN items "
 						+ "ON orders_items.item_id = items.item_id WHERE orders_items.order_id = " + order.getId());) {

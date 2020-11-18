@@ -8,19 +8,13 @@ import static org.mockito.Mockito.when;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import com.qa.ims.utils.Utils;
 
 public class DomainTest {
 	
-	@Mock
-	private Utils utils;
+	private Logger LOGGER;
 	
-	@Mock Logger LOGGER;
-	
-	@InjectMocks
 	private Domain domain;
 	
 	@Test
