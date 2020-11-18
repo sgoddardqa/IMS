@@ -26,6 +26,7 @@ public class IMS {
 
 	public IMS() {
 		this.utils = new Utils();
+		start();
 		final CustomerDAO custDAO = new CustomerDAO();
 		final ItemDAO itemDAO = new ItemDAO();
 		final OrderDAO orderDAO = new OrderDAO();
@@ -33,14 +34,16 @@ public class IMS {
 		this.items = new ItemController(itemDAO, utils);
 		this.orders = new OrderController(orderDAO, utils);
 	}
-
-	public void imsSystem() {
+	
+	private void start() {
 		LOGGER.info("What is your username");
 		String username = utils.getString();
 		LOGGER.info("What is your password");
 		String password = utils.getString();
-
 		DBUtils.connect(username, password);
+	}
+
+	public void imsSystem() {
 		Domain domain = null;
 		do {
 			LOGGER.info("Which entity would you like to use?");
